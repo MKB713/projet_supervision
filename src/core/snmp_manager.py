@@ -3,7 +3,15 @@
 Module SNMP Manager pour interagir avec les équipements réseau
 """
 
-from pysnmp.hlapi import *
+#!/usr/bin/env python3
+"""
+Module SNMP Manager pour interagir avec les équipements réseau
+"""
+
+from pysnmp.hlapi import (
+    getCmd, SnmpEngine, CommunityData, UdpTransportTarget,
+    ContextData, ObjectType, ObjectIdentity
+)
 import time
 from datetime import datetime
 import json
