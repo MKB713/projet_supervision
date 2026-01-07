@@ -1,13 +1,20 @@
 #!/usr/bin/env python3
-"""
-Module SNMP Manager pour interagir avec les équipements réseau
-"""
 
-from pysnmp.hlapi import *
+
+#!/usr/bin/env python3
+#"""
+#Module SNMP Manager pour interagir avec les équipements réseau
+#"""
+
+from pysnmp.hlapi import (
+    getCmd, SnmpEngine, CommunityData, UdpTransportTarget,
+    ContextData, ObjectType, ObjectIdentity
+)
 import time
 from datetime import datetime
 import json
 from typing import Dict, List, Optional
+
 
 class SNMPManager:
     """Gestionnaire SNMP pour la supervision réseau"""
@@ -38,8 +45,8 @@ class SNMPManager:
         """
         try:
             # Configuration du transport
-            transport = UdpTransportTarget((target_ip, port), timeout=2.0, retries=1)
-            
+            # Configuration du transport
+            transport = UdpTransportTarget((target_ip, port), timeout=3.0, retries=2)            
             # Configuration des données SNMP
             if self.version == '1':
                 auth_data = CommunityData(self.community, mpModel=0)
