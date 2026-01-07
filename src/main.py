@@ -93,98 +93,24 @@ def launch_gui():
     print("\n🚀 Lancement de l'interface graphique...")
     
     try:
-        # Essayer d'abord l'interface simple
-        from gui.simple_gui import main as gui_main
-        gui_main()
+        from PyQt5.QtWidgets import QApplication
+        from gui.main_window import MainWindow
+        
+        app = QApplication(sys.argv)
+        app.setStyle('Fusion')  # Style moderne
+        
+        window = MainWindow()
+        window.show()
+        
+        sys.exit(app.exec_())
         
     except ImportError as e:
         print(f"❌ Erreur d'importation: {e}")
-        print("Création d'une interface graphique de secours...")
-        create_fallback_gui()
+        print("Installez les dépendances: pip install -r requirements.txt")
     except Exception as e:
         print(f"❌ Erreur: {e}")
         import traceback
         traceback.print_exc()
-
-def create_fallback_gui():
-    """Créer une interface graphique de secours"""
-    import sys  # Ajout de l'import sys
-    
-    try:
-        from PyQt5.QtWidgets import (QApplication, QMainWindow, QWidget, 
-                                   QVBoxLayout, QLabel, QPushButton, 
-                                   QTextEdit, QMessageBox)
-        from PyQt5.QtCore import Qt
-        
-        class FallbackWindow(QMainWindow):
-            def __init__(self):
-                super().__init__()
-                self.setWindowTitle("Supervision Réseau - Mode Simple")
-                self.setGeometry(100, 100, 600, 400)
-                
-                central = QWidget()
-                self.setCentralWidget(central)
-                
-                layout = QVBoxLayout()
-                
-                # Titre
-                title = QLabel("🔧 Plateforme de Supervision Réseau")
-                title.setAlignment(Qt.AlignCenter)
-                title.setStyleSheet("font-size: 16px; font-weight: bold; padding: 10px;")
-                layout.addWidget(title)
-                
-                # Message
-                message = QLabel(
-                    "L'interface graphique complète n'est pas encore disponible.\n"
-                    "Utilisez le mode ligne de commande (CLI) pour le moment."
-                )
-                message.setAlignment(Qt.AlignCenter)
-                layout.addWidget(message)
-                
-                # Boutons
-                cli_btn = QPushButton("📟 Lancer le mode CLI")
-                cli_btn.clicked.connect(self.launch_cli)
-                cli_btn.setStyleSheet("padding: 10px; font-weight: bold;")
-                
-                test_btn = QPushButton("🧪 Tester la connexion")
-                test_btn.clicked.connect(self.run_tests)
-                
-                layout.addWidget(cli_btn)
-                layout.addWidget(test_btn)
-                layout.addStretch()
-                
-                central.setLayout(layout)
-            
-            def launch_cli(self):
-                """Lancer le mode CLI"""
-                self.close()
-                launch_cli()
-            
-            def run_tests(self):
-                """Exécuter les tests"""
-                QMessageBox.information(self, "Tests", 
-                    "Pour tester:\n\n"
-                    "1. SNMP: python -c \"from core.snmp_manager import SNMPManager; "
-                    "m = SNMPManager(); print(m.get_system_info('10.158.68.201'))\"\n\n"
-                    "2. Nagios: http://10.158.68.200/nagios4\n"
-                    "   Login: nagiosadmin\n"
-                    "   Password: admin123")
-        
-        app = QApplication(sys.argv)  # Correction appliquée ici
-        window = FallbackWindow()
-        window.show()
-        app.exec_()
-        
-    except ImportError as e:
-        print(f"❌ PyQt5 non disponible: {e}")
-        print("📟 Lancement automatique du mode CLI...")
-        launch_cli()
-    except Exception as e:
-        print(f"❌ Erreur lors de la création de l'interface: {e}")
-        import traceback
-        traceback.print_exc()
-        print("📟 Lancement automatique du mode CLI...")
-        launch_cli()
 
 def launch_cli():
     """Lancer en mode ligne de commande"""
