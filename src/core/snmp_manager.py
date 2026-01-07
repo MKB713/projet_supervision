@@ -46,8 +46,8 @@ class SNMPManager:
         """
         try:
             # Configuration du transport
-            transport = UdpTransportTarget((target_ip, port), timeout=2.0, retries=1)
-            
+            # Configuration du transport
+            transport = UdpTransportTarget((target_ip, port), timeout=3.0, retries=2)            
             # Configuration des données SNMP
             if self.version == '1':
                 auth_data = CommunityData(self.community, mpModel=0)
