@@ -57,6 +57,33 @@ def main():
             launch_cli()
         elif choice == '3':
             launch_tests()
+        elif choice == '4':
+            print("\n📊 Capture réseau...")
+            from core.packet_analyzer import PacketAnalyzer
+            
+            analyzer = PacketAnalyzer()
+            
+            print("Interfaces disponibles:")
+            interfaces = analyzer.list_interfaces()
+            for iface in interfaces:
+                print(f"  • {iface['name']} ({iface['state']})")
+            
+            interface = input("\nInterface [lo]: ").strip() or 'lo'
+            analyzer.interface = interface
+            
+            print(f"\nCapture sur {interface}...")
+            analyzer.start_capture(packet_count=20, timeout=5)
+            
+            import time
+            time.sleep(6)
+            
+            analyzer.stop_capture()
+            
+            print(f"\n✅ {len(analyzer.get_packets())} paquets capturés")
+            
+            stats = analyzer.get_statistics()
+            print(f"   Bytes: {stats.get('total_bytes', 0)}")
+            print(f"   Protocoles: {len(stats.get('protocols', {}))}")
         else:
             print("Au revoir!")
             sys.exit(0)
